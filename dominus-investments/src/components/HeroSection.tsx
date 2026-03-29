@@ -334,7 +334,7 @@ export default function HeroSection() {
 
             <div className="hero-actions" data-animate>
               <a href="/work-with-us" className="hero-btn-primary">
-                Work With Us
+                About Us
               </a>
               <a href="/work-with-us#form" className="hero-btn-ghost">
                 Submit Your Business

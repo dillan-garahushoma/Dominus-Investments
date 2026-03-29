@@ -1,0 +1,71 @@
+/* Global animations and transitions */
+
+@keyframes scanMask {
+  0% {
+    mask-position: 0% 200%;
+  }
+  100% {
+    mask-position: 0% -100%;
+  }
+}
+
+.animate-scan-mask {
+  animation: scanMask 2s linear infinite;
+}
+
+.transition-fade-up {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.transition-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.transition-fade {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.transition-fade.visible {
+  opacity: 1;
+}
+
+.transition-slide-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.transition-slide-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.transition-smooth {
+  transition: all 0.25s ease-in-out;
+}
+
+.hover-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.hover-underline:hover::after {
+  transform: scaleX(1);
+}

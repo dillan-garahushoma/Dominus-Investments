@@ -1,0 +1,24 @@
+@keyframes scanMask {
+  0% {
+    mask-position: 0% 200%;
+  }
+  100% {
+    mask-position: 0% -100%;
+  }
+}
+
+img[data-animate-scan] {
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 1) 50%, transparent 100%);
+  mask-size: 100% 200%;
+  mask-repeat: no-repeat;
+  animation: scanMask 2s linear infinite;
+}
+
+:where([style*="--img-aspect-ratio"]) {
+  aspect-ratio: var(--img-aspect-ratio);
+}
+
+:where([style*="--img-default-width"]) {
+  width: var(--img-default-width);
+  max-width: 100%;
+}

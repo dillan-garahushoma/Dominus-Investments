@@ -1,6 +1,4 @@
 import { useRef, useEffect, useState } from "react";
-
-
 const AMBER_GOLD = "#C6922A";
 
 // ── Reusable animation hook ──────────────────────────────────────────────────

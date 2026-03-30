@@ -28,6 +28,7 @@ const stages = [
   {
     number: "01",
     title: "Business Assessment",
+    imageSrc: new URL("./(1) Instagram.jpg", import.meta.url).href,
     shortDescription: "Before anything changes, everything must be understood.",
     detailedDescription:
       "We conduct a deep diagnostic of your business — financial performance, operational workflows, team structure, and market positioning. Nothing is assumed. We interrogate the numbers, the processes, and the people to map exactly where your business stands and what's holding it back.",
@@ -37,6 +38,7 @@ const stages = [
   {
     number: "02",
     title: "Stabilisation",
+    imageSrc: new URL("./Restoration Success Stories_ Real Credit Turnarounds.jpg", import.meta.url).href,
     shortDescription: "Stop the bleeding before you build.",
     detailedDescription:
       "Most struggling businesses have urgent problems that compound daily. We identify and fix the critical issues first — cash flow leaks, accountability gaps, operational chaos — establishing the stable foundation your business needs before any growth strategy can take hold.",
@@ -46,6 +48,7 @@ const stages = [
   {
     number: "03",
     title: "Systems Implementation",
+    imageSrc: new URL("./Descubre protección de datos y privacidad.jpg", import.meta.url).href,
     shortDescription: "Build the engine that runs without you.",
     detailedDescription:
       "This is where transformation happens. We design and deploy scalable internal systems — SOPs, accountability frameworks, reporting structures, and performance metrics — that create consistency and predictability. Your business stops depending on individual effort and starts operating as a system.",
@@ -55,6 +58,7 @@ const stages = [
   {
     number: "04",
     title: "Growth & Scaling",
+    imageSrc: new URL("./Revealed_ Number of new homes GC needs in just 20 years.jpg", import.meta.url).href,
     shortDescription: "Accelerate with confidence, not chaos.",
     detailedDescription:
       "Only once the foundation is solid do we press on the accelerator. We identify the highest-leverage growth opportunities — new revenue streams, market expansion, team scaling — and execute against them with the systems already in place to support it.",
@@ -161,9 +165,9 @@ function MethodHero() {
         }
         .mh-line { width: 40px; height: 1px; background: ${GOLD}; opacity: 0.7; }
         .mh-eyebrow-text {
-          font-family: 'Jost', sans-serif;
+          font-family: 'Georgia', 'Times New Roman', serif;
           font-size: 10.5px;
-          font-weight: 500;
+          font-weight: 700;
           letter-spacing: 0.22em;
           text-transform: uppercase;
           color: ${GOLD};
@@ -171,17 +175,21 @@ function MethodHero() {
         }
 
         .mh-h1 {
-          font-size: clamp(56px, 8.5vw, 110px);
-          font-weight: 300;
+          font-family: 'Georgia', 'Times New Roman', serif;
+          font-size: clamp(46px, 8.5vw, 85px);
+          font-weight: 700;
           color: ${CREAM};
           line-height: 0.95;
-          letter-spacing: -0.025em;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
           margin-bottom: 36px;
         }
         .mh-h1 em {
           color: ${GOLD};
-          font-style: italic;
-          font-weight: 300;
+          font-style: normal;
+          font-weight: 600;
+          text-transform: none;
+          letter-spacing: -0.02em;
         }
 
         .mh-p {
@@ -336,7 +344,7 @@ function StageCard({ stage, index }: { stage: typeof stages[0]; index: number })
         }
         .sc-stage-num {
           font-family: 'Jost', sans-serif;
-          font-size: 11px;
+          font-size: 15px;
           font-weight: 500;
           letter-spacing: 0.2em;
           text-transform: uppercase;
@@ -376,7 +384,7 @@ function StageCard({ stage, index }: { stage: typeof stages[0]; index: number })
 
         .sc-detail {
           font-family: 'Jost', sans-serif;
-          font-size: 14.5px;
+          font-size: 18.5px;
           font-weight: 300;
           line-height: 1.9;
           color: rgba(26,26,26,0.5);
@@ -436,19 +444,13 @@ function StageCard({ stage, index }: { stage: typeof stages[0]; index: number })
         }
         .sc-visual-box:hover::after { opacity: 1; }
 
-        .sc-visual-num {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(140px, 18vw, 220px);
-          font-weight: 300;
-          color: rgba(26,26,26,0.06);
-          line-height: 1;
-          letter-spacing: -0.04em;
-          user-select: none;
-          transition: color 0.5s ease;
+        .sc-visual-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
-        .sc-visual-box:hover .sc-visual-num {
-          color: rgba(198,146,42,0.13);
-        }
+        .sc-visual-num { display: none; }
 
         .sc-visual-label {
           position: absolute;
@@ -510,7 +512,7 @@ function StageCard({ stage, index }: { stage: typeof stages[0]; index: number })
             style={{ direction: "ltr" }}
           >
             <div className="sc-visual-box">
-              <span className="sc-visual-num">{stage.number}</span>
+              <img className="sc-visual-img" src={stage.imageSrc} alt={`${stage.title} visual`} />
               <div className="sc-visual-label">
                 <div className="sc-vl-line" />
                 <span className="sc-vl-text">{stage.title}</span>
@@ -525,212 +527,6 @@ function StageCard({ stage, index }: { stage: typeof stages[0]; index: number })
   );
 }
 
-// ── CTA Section ───────────────────────────────────────────────────────────────
-function MethodCTA() {
-  const { ref, inView } = useInView(0.15);
-
-  return (
-    <>
-      <style>{`
-        .mcta-root {
-          background: ${INK};
-          position: relative;
-          overflow: hidden;
-          padding: 130px 48px;
-          font-family: 'Cormorant Garamond', Georgia, serif;
-          text-align: center;
-        }
-
-        /* Warm radial glow only — no grid */
-        .mcta-root::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(198,146,42,0.08) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        .mcta-top-rule {
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, ${GOLD}66, transparent);
-        }
-
-        .mcta-inner {
-          position: relative;
-          z-index: 2;
-          max-width: 640px;
-          margin: 0 auto;
-        }
-
-        .mcta-eyebrow {
-          display: inline-flex;
-          align-items: center;
-          gap: 14px;
-          margin-bottom: 36px;
-        }
-        .mcta-line { width: 36px; height: 1px; background: ${GOLD}; opacity: 0.7; }
-        .mcta-eyebrow-text {
-          font-family: 'Jost', sans-serif;
-          font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: ${GOLD};
-        }
-
-        .mcta-h2 {
-          font-size: clamp(42px, 6vw, 72px);
-          font-weight: 300;
-          color: ${CREAM};
-          line-height: 1.05;
-          letter-spacing: -0.02em;
-          margin-bottom: 28px;
-        }
-        .mcta-h2 em { color: ${GOLD}; font-style: italic; }
-
-        .mcta-p {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(15px, 1.4vw, 18px);
-          font-weight: 300;
-          font-style: italic;
-          line-height: 1.85;
-          color: rgba(249,246,241,0.52);
-          margin-bottom: 52px;
-        }
-
-        .mcta-actions {
-          display: flex;
-          gap: 16px;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-
-        .mcta-btn-primary {
-          font-family: 'Jost', sans-serif;
-          font-size: 10.5px;
-          font-weight: 600;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          background: ${GOLD};
-          color: #fff;
-          border: 1px solid ${GOLD};
-          padding: 17px 44px;
-          text-decoration: none;
-          display: inline-block;
-          border-radius: 3px;
-          transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
-        }
-        .mcta-btn-primary:hover {
-          background: #b0811f;
-          transform: translateY(-2px);
-          box-shadow: 0 10px 32px rgba(198,146,42,0.3);
-        }
-        .mcta-btn-primary:active { transform: translateY(0); }
-
-        .mcta-btn-ghost {
-          font-family: 'Jost', sans-serif;
-          font-size: 10.5px;
-          font-weight: 500;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          background: transparent;
-          color: rgba(249,246,241,0.7);
-          border: 1px solid rgba(249,246,241,0.2);
-          padding: 17px 44px;
-          text-decoration: none;
-          display: inline-block;
-          border-radius: 3px;
-          transition: border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
-        }
-        .mcta-btn-ghost:hover {
-          border-color: rgba(249,246,241,0.55);
-          color: ${CREAM};
-          transform: translateY(-2px);
-        }
-
-        .mcta-wa-wrap {
-          margin-top: 40px;
-        }
-        .mcta-wa {
-          display: inline-flex;
-          align-items: center;
-          gap: 9px;
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 14px;
-          font-style: italic;
-          color: rgba(249,246,241,0.35);
-          text-decoration: none;
-          transition: color 0.3s;
-        }
-        .mcta-wa:hover { color: ${GOLD}; }
-        .mcta-wa-dot {
-          width: 7px; height: 7px;
-          border-radius: 50%;
-          background: #25D366;
-          flex-shrink: 0;
-        }
-
-        @media (max-width: 600px) {
-          .mcta-root { padding: 100px 28px; }
-        }
-      `}</style>
-
-      <section className="mcta-root" ref={ref}>
-        <div className="mcta-top-rule" />
-        <div className="mcta-inner">
-
-          <div className={`reveal${inView ? " in" : ""}`}>
-            <div className="mcta-eyebrow">
-              <div className="mcta-line" />
-              <span className="mcta-eyebrow-text">Take The First Step</span>
-              <div className="mcta-line" />
-            </div>
-          </div>
-
-          <div className={`reveal d1${inView ? " in" : ""}`}>
-            <h2 className="mcta-h2">Ready to <em>Begin?</em></h2>
-          </div>
-
-          <div className={`reveal d2${inView ? " in" : ""}`}>
-            <p className="mcta-p">
-              Discover which stage your business needs most. Complete our
-              pre-qualification assessment to find out if the Dominus Method
-              is the right fit for where you are today.
-            </p>
-          </div>
-
-          <div className={`reveal d3${inView ? " in" : ""}`}>
-            <div className="mcta-actions">
-              <a href="/work-with-us" className="mcta-btn-primary">
-                Start Your Assessment
-              </a>
-              <a href="/work-with-us#form" className="mcta-btn-ghost">
-                Submit Your Business
-              </a>
-            </div>
-          </div>
-
-          <div className={`reveal d4${inView ? " in" : ""}`}>
-            <div className="mcta-wa-wrap">
-              <a
-                href="https://wa.me/27000000000"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mcta-wa"
-              >
-                <span className="mcta-wa-dot" />
-                Or contact us directly via WhatsApp
-              </a>
-            </div>
-          </div>
-
-        </div>
-      </section>
-    </>
-  );
-}
 
 // ── Page ───────────────────────────────────────────────────────────────────────
 export default function TheMethodPage() {
@@ -741,7 +537,6 @@ export default function TheMethodPage() {
       {stages.map((stage, index) => (
         <StageCard key={stage.number} stage={stage} index={index} />
       ))}
-      <MethodCTA />
       <Footer />
     </div>
   );

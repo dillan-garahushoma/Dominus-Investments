@@ -1,10 +1,20 @@
 import { useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const AMBER_GOLD = "#C6922A";
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
 
+  // Scroll-based parallax for the images
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const image1Y = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const image2Y = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
+
+  // Stagger-in animation for the left-side text elements
   useEffect(() => {
     const elements = heroRef.current?.querySelectorAll("[data-animate]");
     if (!elements) return;
@@ -179,110 +189,35 @@ export default function HeroSection() {
           height: 36px;
           background: #e8e0d4;
         }
+
+        /* ── Right side image stack ── */
         .hero-right {
           position: relative;
-        }
-        .hero-card {
-          background: white;
-          border: 0.5px solid #e8e0d4;
-          border-radius: 8px;
-          padding: 28px;
-          margin-bottom: 16px;
-          position: relative;
-        }
-        .hero-card-accent {
-          position: absolute;
-          top: 0; left: 28px; right: 28px;
-          height: 2px;
-          background: ${AMBER_GOLD};
-          border-radius: 0 0 2px 2px;
-        }
-        .hero-card-step {
-          font-size: 10px;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: ${AMBER_GOLD};
-          margin-bottom: 8px;
-          font-family: 'Georgia', 'Times New Roman', serif;
-        }
-        .hero-card-title {
-          font-size: 15px;
-          font-weight: 700;
-          color: #1a1a1a;
-          margin-bottom: 6px;
-          font-family: 'Georgia', 'Times New Roman', serif;
-        }
-        .hero-card-body {
-          font-size: 13px;
-          color: #888;
-          line-height: 1.6;
-          font-style: italic;
-          font-family: 'Georgia', 'Times New Roman', serif;
-        }
-        .hero-cards-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 14px;
-        }
-        .hero-card-sm {
-          background: white;
-          border: 0.5px solid #e8e0d4;
-          border-radius: 8px;
-          padding: 18px 20px;
-          position: relative;
-          overflow: hidden;
-        }
-        .hero-card-sm::before {
-          content: '';
-          position: absolute;
-          left: 0; top: 0; bottom: 0;
-          width: 2px;
-          background: ${AMBER_GOLD};
-        }
-        .hero-card-sm-step {
-          font-size: 10px;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: ${AMBER_GOLD};
-          margin-bottom: 6px;
-          font-family: 'Georgia', 'Times New Roman', serif;
-        }
-        .hero-card-sm-title {
-          font-size: 13px;
-          font-weight: 700;
-          color: #1a1a1a;
-          margin-bottom: 3px;
-          font-family: 'Georgia', 'Times New Roman', serif;
-        }
-        .hero-card-sm-body {
-          font-size: 11px;
-          color: #aaa;
-          font-style: italic;
-          font-family: 'Georgia', 'Times New Roman', serif;
-        }
-        .hero-quote {
-          background: #1a1a1a;
-          border-radius: 6px;
-          padding: 16px 20px;
-          margin-top: 14px;
           display: flex;
-          align-items: center;
-          gap: 14px;
+          flex-direction: column;
+          gap: 20px;
+          align-self: stretch;
         }
-        .hero-quote-bar {
-          width: 2px;
-          height: 36px;
-          background: ${AMBER_GOLD};
-          border-radius: 2px;
-          flex-shrink: 0;
+        .hero-img-primary {
+          width: 100%;
+          height: 42vh;
+          overflow: hidden;
+          border-radius: 4px;
         }
-        .hero-quote-text {
-          font-size: 13px;
-          color: rgba(255,255,255,0.85);
-          font-style: italic;
-          line-height: 1.5;
-          font-family: 'Georgia', 'Times New Roman', serif;
+        .hero-img-secondary {
+          width: 100%;
+          height: 34vh;
+          overflow: hidden;
+          border-radius: 4px;
         }
+        .hero-img-primary img,
+        .hero-img-secondary img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
         @media (max-width: 900px) {
           .hero-inner {
             grid-template-columns: 1fr;
@@ -310,7 +245,7 @@ export default function HeroSection() {
         />
 
         <div className="hero-inner">
-          {/* Left — Copy */}
+          {/* ── Left — Copy ─────────────────────────────── */}
           <div>
             <div className="hero-eyebrow" data-animate>
               <div className="hero-eyebrow-line" />
@@ -365,45 +300,37 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right — Visual cards */}
+          {/* ── Right — Image Stack ──────────────────────── */}
           <div className="hero-right" data-animate>
-            <div className="hero-card">
-              <div className="hero-card-accent" />
-              <div className="hero-card-step">Step 01</div>
-              <div className="hero-card-title">Business Assessment</div>
-              <div className="hero-card-body">
-                We get inside your business and find what's broken — including
-                the things you can't see yourself.
-              </div>
-            </div>
+            {/* Primary image — add your image src here */}
+            <motion.div
+              className="hero-img-primary"
+              style={{ y: image1Y }}
+              initial={{ opacity: 0, scale: 1.08 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+            >
+              {/* TODO: Replace src with your actual image */}
+              <img
+                src="your-primary-image.jpg"
+                alt="Business strategy session"
+              />
+            </motion.div>
 
-            <div className="hero-cards-grid">
-              <div className="hero-card-sm">
-                <div className="hero-card-sm-step">Step 02</div>
-                <div className="hero-card-sm-title">Stabilisation</div>
-                <div className="hero-card-sm-body">Stop the bleeding first</div>
-              </div>
-              <div className="hero-card-sm">
-                <div className="hero-card-sm-step">Step 03</div>
-                <div className="hero-card-sm-title">Systems</div>
-                <div className="hero-card-sm-body">Build real structure</div>
-              </div>
-              <div className="hero-card-sm" style={{ gridColumn: "1 / -1" }}>
-                <div className="hero-card-sm-step">Step 04</div>
-                <div className="hero-card-sm-title">Growth & Scaling</div>
-                <div className="hero-card-sm-body">
-                  Scale only once the foundation is solid
-                </div>
-              </div>
-            </div>
-
-            <div className="hero-quote">
-              <div className="hero-quote-bar" />
-              <div className="hero-quote-text">
-                "Most consultants tell you what to fix. We stay until it's
-                fixed."
-              </div>
-            </div>
+            {/* Secondary image — add your image src here */}
+            <motion.div
+              className="hero-img-secondary"
+              style={{ y: image2Y }}
+              initial={{ opacity: 0, scale: 1.08 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+            >
+              {/* TODO: Replace src with your actual image */}
+              <img
+                src="your-secondary-image.jpg"
+                alt="Business growth consultation"
+              />
+            </motion.div>
           </div>
         </div>
       </section>

@@ -1,61 +1,134 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
-import type { ImgHTMLAttributes } from 'react';
-import type { MutableRefObject } from 'react';
-import { useSize } from '../../hooks/use-size';
-import './image.css';
-import { cn } from '../../lib/utils';
+import { forwardRef, type ImgHTMLAttributes, useEffect, useRef, useState } from 'react'
+import { useSize } from '@/hooks/use-size'
+import './image.css'
+import { cn } from '@/lib/utils'
 
-const FALLBACK_IMAGE_URL = 'https://static.wixstatic.com/media/12d367_4f26ccd17f8f4e3a8958306ea08c2332~mv2.png';
+const FALLBACK_IMAGE_URL = 'https://static.wixstatic.com/media/12d367_4f26ccd17f8f4e3a8958306ea08c2332~mv2.png'
 
-export type ImageProps = ImgHTMLAttributes<HTMLImageElement> & {
-  enableScanMask?: boolean;
-};
+type ImageData = {
+  id: string
+  width: number
+  height: number
+  focalPoint?: {
+    x: number
+    y: number
+  }
+}
 
-const Image = forwardRef<HTMLImageElement, ImageProps>(
-  ({ src, className, style, enableScanMask = false, ...props }, forwardedRef) => {
-    const wrapperRef = useRef<HTMLSpanElement | null>(null);
-    const imgRef = useRef<HTMLImageElement | null>(null);
-    const size = useSize(wrapperRef);
-    const [currentSrc, setCurrentSrc] = useState<string | undefined>(src ?? FALLBACK_IMAGE_URL);
+type WixImageDataProps = {
+  fittingType?: 'fill' | 'fit'
+  originWidth?: number
+  originHeight?: number
+  focalPointX?: number
+  focalPointY?: number
+}
 
-    useEffect(() => {
-      if (!src) return;
-      setCurrentSrc(src);
-    }, [src]);
+const getImageData = (url: string, imageProps: WixImageDataProps): ImageData | undefined => {
+  const wixImagePrefix = 'wix:image://v1/'
 
-    useEffect(() => {
-      if (forwardedRef && typeof forwardedRef !== 'function' && imgRef.current) {
-        (forwardedRef as MutableRefObject<HTMLImageElement | null>).current = imgRef.current;
+  if (url.startsWith(wixImagePrefix)) {
+    const uri = url.replace(wixImagePrefix, '').split('#')[0].split('/')[0]
+    const params = new URLSearchParams(url.split('#')[1] || '')
+    const width = parseInt(params.get('originWidth') || '0', 10)
+    const height = parseInt(params.get('originHeight') || '0', 10)
+
+    if (width > 0 && height > 0) {
+      return { id: uri, width, height }
+    }
+  }
+
+  if (/^https?:\/\//.test(url)) {
+    const width = imageProps.originWidth || 0
+    const height = imageProps.originHeight || 0
+    if (width > 0 && height > 0) {
+      return {
+        id: url,
+        width,
+        height,
+        focalPoint:
+          typeof imageProps.focalPointX === 'number' && typeof imageProps.focalPointY === 'number'
+            ? { x: imageProps.focalPointX, y: imageProps.focalPointY }
+            : undefined,
       }
-    }, [forwardedRef]);
+    }
+  }
 
-    const aspectRatio = size ? `${size.width} / ${size.height}` : undefined;
+  return undefined
+}
 
-    const imgClassNames = cn('block w-full h-full object-cover', className);
+export type ImageProps = ImgHTMLAttributes<HTMLImageElement> & WixImageDataProps
+
+type ImageWrapperProps = {
+  data: ImageData
+  className?: string
+  style?: React.CSSProperties
+  children: React.ReactNode
+}
+
+const ImageWrapper = forwardRef<HTMLSpanElement, ImageWrapperProps>(({ data, className, style, children }, ref) => {
+  const { width, height } = data
+  const aspectRatio = width && height ? `${width} / ${height}` : undefined
+  const defaultWidth = width ? `${width}px` : undefined
+
+  return (
+    <span
+      ref={ref}
+      className={cn('inline-block relative', className)}
+      style={
+        {
+          '--img-aspect-ratio': aspectRatio,
+          '--img-default-width': defaultWidth,
+          ...style,
+        } as React.CSSProperties
+      }
+    >
+      {children}
+    </span>
+  )
+})
+ImageWrapper.displayName = 'ImageWrapper'
+
+export const Image = forwardRef<HTMLImageElement, ImageProps>(
+  ({ src, fittingType = 'fill', originWidth, originHeight, focalPointX, focalPointY, className, style, ...props }, ref) => {
+    const wrapperRef = useRef<HTMLSpanElement | null>(null)
+    const size = useSize(wrapperRef)
+    const [imgSrc, setImgSrc] = useState<string | undefined>(src)
+
+    useEffect(() => {
+      if (src !== imgSrc) {
+        setImgSrc(src)
+      }
+    }, [src, imgSrc])
+
+    if (!imgSrc) {
+      return <div data-empty-image ref={ref} {...props} />
+    }
+
+    const imageData = getImageData(imgSrc, { fittingType, originWidth, originHeight, focalPointX, focalPointY })
+
+    const imgProps: ImgHTMLAttributes<HTMLImageElement> = {
+      ...props,
+      src: imgSrc,
+      className: cn('block w-full h-full object-cover', className),
+      onError: () => setImgSrc(FALLBACK_IMAGE_URL),
+    }
+
+    if (!imageData || !size) {
+      return (
+        <span ref={wrapperRef} className={cn('inline-block relative', className)} style={style}>
+          <img ref={ref} {...imgProps} />
+        </span>
+      )
+    }
 
     return (
-      <span
-        ref={wrapperRef}
-        className={cn('inline-block relative', className)}
-        style={{
-          ...(style || {}),
-          '--img-aspect-ratio': aspectRatio,
-          '--img-default-width': size?.width ? `${size.width}px` : undefined,
-        } as React.CSSProperties}
-      >
-        <img
-          ref={imgRef}
-          src={currentSrc || FALLBACK_IMAGE_URL}
-          onError={() => setCurrentSrc(FALLBACK_IMAGE_URL)}
-          className={imgClassNames}
-          data-animate-scan={enableScanMask || undefined}
-          {...props}
-        />
-      </span>
-    );
+      <ImageWrapper ref={wrapperRef} data={imageData} className={className} style={style}>
+        <img ref={ref} {...imgProps} />
+      </ImageWrapper>
+    )
   }
-);
+)
 
-Image.displayName = 'Image';
+Image.displayName = 'Image'
 
-export default Image;
+export default Image

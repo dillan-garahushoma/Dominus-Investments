@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import HeroSection from "../components/HeroSection";
-import Navigation from "../components/Navigation";
+
 
 const AMBER_GOLD = "#C6922A";
 

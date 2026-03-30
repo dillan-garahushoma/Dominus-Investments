@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import degreeImg from "./degree.jpg";
+import downloadImg from "./download (6).jpg";
 
 const AMBER_GOLD = "#C6922A";
 
@@ -119,9 +121,9 @@ export default function HeroSection() {
           flex-wrap: wrap;
         }
         .hero-btn-primary {
-          background: ${AMBER_GOLD};
-          color: white;
-          border: none;
+          background: transparent;
+          color: ${AMBER_GOLD};
+          border: 1px solid ${AMBER_GOLD};
           padding: 14px 28px;
           border-radius: 4px;
           font-size: 12px;
@@ -136,6 +138,7 @@ export default function HeroSection() {
         }
         .hero-btn-primary:hover {
           background: #b0811f;
+          Color: white;
           transform: translateY(-1px);
         }
         .hero-btn-ghost {
@@ -269,7 +272,7 @@ export default function HeroSection() {
 
             <div className="hero-actions" data-animate>
               <a href="/work-with-us" className="hero-btn-primary">
-                About Us
+                WHAT WE DO
               </a>
               <a href="/work-with-us#form" className="hero-btn-ghost">
                 Submit Your Business
@@ -310,9 +313,8 @@ export default function HeroSection() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             >
-              {/* TODO: Replace src with your actual image */}
               <img
-                src="your-primary-image.jpg"
+                src={degreeImg}
                 alt="Business strategy session"
               />
             </motion.div>
@@ -325,9 +327,8 @@ export default function HeroSection() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
             >
-              {/* TODO: Replace src with your actual image */}
               <img
-                src="your-secondary-image.jpg"
+                src={downloadImg}
                 alt="Business growth consultation"
               />
             </motion.div>

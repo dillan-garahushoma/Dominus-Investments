@@ -535,7 +535,6 @@ export default function Home() {
       <HeroSection />
       <WhatWeDo />
       <TheMethod />
-      <CTASection />
       <Footer />
     </>
   );

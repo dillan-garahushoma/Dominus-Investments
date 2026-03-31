@@ -12,28 +12,7 @@ React Router v7 — client-side routing with SPA fallback
 Lucide React — iconography
 Custom CSS-in-JS styling (inline <style> blocks per component)
 
-
-src/
-├── components/
-│   ├── Navigation.tsx       # Sticky nav with scroll state + mobile menu
-│   ├── HeroSection.tsx      # Parallax image stack hero
-│   ├── Footer.tsx           # CTA section + site footer
-│   └── ui/
-│       └── image.tsx        # Wix-compatible image component
-├── pages/
-│   ├── Home.tsx             # Landing page (Hero, What We Do, The Method)
-│   ├── About.tsx            # Full about page with mission, values, SA context
-│   ├── TheMethodPage.tsx    # Four-stage framework detail page
-│   ├── Services.tsx         # Placeholder
-│   └── Contact.tsx          # Placeholder
-├── hooks/
-│   └── use-size.ts          # ResizeObserver hook
-├── styles/
-│   ├── fonts.css            # Cormorant Garamond + Futura font faces
-│   └── animations.css       # Shared reveal/fade utility classes
-└── lib/
-    └── utils.ts             # cn() class merging utility
-
+-----------------------------------------------------------------
 Getting Started
 Requirements: Node.js >=20.19.0
 bash# Install dependencies

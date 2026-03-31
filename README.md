@@ -13,7 +13,6 @@ Lucide React — iconography
 Custom CSS-in-JS styling (inline <style> blocks per component)
 
 
-Project Structure
 src/
 ├── components/
 │   ├── Navigation.tsx       # Sticky nav with scroll state + mobile menu

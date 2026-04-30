@@ -1,4 +1,5 @@
 import Footer from "../components/Footer";
+import SoftAurora from "../components/SoftAurora";
 import { useInView } from "../hooks/useInView";
 
 const GOLD = "#C6922A";
@@ -392,7 +393,9 @@ function PartnerSection() {
     <>
       <style>{`
         .partner-root {
-          background: ${INK};
+          background:
+            radial-gradient(ellipse 70% 80% at 50% 50%, rgba(198,146,42,0.12), transparent 70%),
+            linear-gradient(135deg, #0d0d0d 0%, ${INK} 52%, #111 100%);
           color: ${CREAM};
           padding: 122px 48px;
           font-family: 'Cormorant Garamond', Georgia, serif;
@@ -402,14 +405,19 @@ function PartnerSection() {
         .partner-root::before {
           content: '';
           position: absolute;
-          width: 640px;
-          height: 640px;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(198,146,42,0.12), transparent 70%);
+          inset: 0;
+          background:
+            linear-gradient(180deg, rgba(13,13,13,0.34), rgba(13,13,13,0.8)),
+            radial-gradient(ellipse at center, transparent 0%, rgba(13,13,13,0.28) 42%, rgba(13,13,13,0.88) 100%);
           pointer-events: none;
+          z-index: 1;
+        }
+        .partner-aurora {
+          position: absolute;
+          inset: -18%;
+          z-index: 0;
+          opacity: 0.82;
+          filter: saturate(1.08);
         }
         .partner-inner {
           position: relative;
@@ -494,6 +502,23 @@ function PartnerSection() {
       `}</style>
 
       <section className="partner-root" ref={ref}>
+        <SoftAurora
+          className="partner-aurora"
+          speed={0.48}
+          scale={1.35}
+          brightness={0.72}
+          color1="#C6922A"
+          color2="#F9F6F1"
+          noiseFrequency={2.2}
+          noiseAmplitude={0.9}
+          bandHeight={0.42}
+          bandSpread={0.88}
+          octaveDecay={0.18}
+          layerOffset={0.56}
+          colorSpeed={0.65}
+          enableMouseInteraction
+          mouseInfluence={0.16}
+        />
         <div className="partner-inner">
           <div className={`transition-slide-up${inView ? " visible" : ""}`}>
             <div className="partner-label"><span>Partner With Dominus</span></div>

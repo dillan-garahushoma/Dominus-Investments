@@ -1,10 +1,11 @@
 import Footer from "../components/Footer";
-import SoftAurora from "../components/SoftAurora";
 import { useInView } from "../hooks/useInView";
+import { lazy, Suspense } from "react";
 
 const GOLD = "#C6922A";
 const CREAM = "#f9f6f1";
 const INK = "#1a1a1a";
+const SoftAurora = lazy(() => import("../components/SoftAurora"));
 
 const services = [
   {
@@ -414,10 +415,18 @@ function PartnerSection() {
         }
         .partner-aurora {
           position: absolute;
-          inset: -18%;
+          inset: -8%;
           z-index: 0;
-          opacity: 0.82;
-          filter: saturate(1.08);
+          opacity: 0.72;
+          filter: saturate(1.02);
+        }
+        .partner-aurora-fallback {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          background:
+            radial-gradient(ellipse 68% 70% at 50% 58%, rgba(198,146,42,0.18), transparent 68%),
+            radial-gradient(ellipse 40% 48% at 58% 42%, rgba(249,246,241,0.08), transparent 70%);
         }
         .partner-inner {
           position: relative;
@@ -502,23 +511,27 @@ function PartnerSection() {
       `}</style>
 
       <section className="partner-root" ref={ref}>
-        <SoftAurora
-          className="partner-aurora"
-          speed={0.48}
-          scale={1.35}
-          brightness={0.72}
-          color1="#C6922A"
-          color2="#F9F6F1"
-          noiseFrequency={2.2}
-          noiseAmplitude={0.9}
-          bandHeight={0.42}
-          bandSpread={0.88}
-          octaveDecay={0.18}
-          layerOffset={0.56}
-          colorSpeed={0.65}
-          enableMouseInteraction
-          mouseInfluence={0.16}
-        />
+        <Suspense fallback={<div className="partner-aurora-fallback" aria-hidden="true" />}>
+          <SoftAurora
+            className="partner-aurora"
+            speed={0.48}
+            scale={1.35}
+            brightness={0.72}
+            color1="#C6922A"
+            color2="#F9F6F1"
+            noiseFrequency={2.2}
+            noiseAmplitude={0.9}
+            bandHeight={0.42}
+            bandSpread={0.88}
+            octaveDecay={0.18}
+            layerOffset={0.56}
+            colorSpeed={0.65}
+            enableMouseInteraction={false}
+            maxDpr={1}
+            pauseWhenOffscreen
+            respectReducedMotion
+          />
+        </Suspense>
         <div className="partner-inner">
           <div className={`transition-slide-up${inView ? " visible" : ""}`}>
             <div className="partner-label"><span>Partner With Dominus</span></div>

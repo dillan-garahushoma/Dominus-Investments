@@ -48,7 +48,7 @@ export default function Navigation() {
         }
         .nav-logo {
           display: flex;
-          align-items: baseline;
+          align-items: center;
           gap: 0;
           text-decoration: none;
           letter-spacing: 0.12em;
@@ -57,6 +57,13 @@ export default function Navigation() {
           color: #1a1a1a;
           text-transform: uppercase;
           font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .nav-logo-mark {
+          width: 34px;
+          height: 34px;
+          object-fit: contain;
+          margin-right: 12px;
+          display: block;
         }
         .nav-logo-accent {
           color: ${AMBER_GOLD};
@@ -186,6 +193,11 @@ export default function Navigation() {
         <div className="nav-inner">
           {/* Logo */}
           <a href="/" className="nav-logo">
+            <img
+              src="/dominus-logo.png"
+              alt="Dominus Investments logo"
+              className="nav-logo-mark"
+            />
             <span>Dominus</span>
             <span className="nav-logo-divider" />
             <span className="nav-logo-accent">Investments</span>

@@ -16,6 +16,9 @@ interface SoftAuroraProps {
   colorSpeed?: number;
   enableMouseInteraction?: boolean;
   mouseInfluence?: number;
+  maxDpr?: number;
+  pauseWhenOffscreen?: boolean;
+  respectReducedMotion?: boolean;
   className?: string;
 }
 
@@ -184,6 +187,9 @@ export default function SoftAurora({
   colorSpeed = 1,
   enableMouseInteraction = true,
   mouseInfluence = 0.25,
+  maxDpr = 1.25,
+  pauseWhenOffscreen = true,
+  respectReducedMotion = true,
   className,
 }: SoftAuroraProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -196,11 +202,21 @@ export default function SoftAurora({
     let renderer: Renderer;
     let program: Program | undefined;
     let animationFrameId = 0;
+    let resizeFrameId = 0;
+    let isVisible = !pauseWhenOffscreen;
+    let isDocumentVisible = document.visibilityState === "visible";
     let currentMouse: [number, number] = [0.5, 0.5];
     let targetMouse: [number, number] = [0.5, 0.5];
+    const shouldReduceMotion =
+      respectReducedMotion &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     try {
-      renderer = new Renderer({ alpha: true, premultipliedAlpha: false, dpr: Math.min(window.devicePixelRatio || 1, 2) });
+      renderer = new Renderer({
+        alpha: true,
+        premultipliedAlpha: false,
+        dpr: Math.min(window.devicePixelRatio || 1, maxDpr),
+      });
     } catch {
       return;
     }
@@ -212,11 +228,26 @@ export default function SoftAurora({
     gl.canvas.style.height = "100%";
     gl.canvas.style.pointerEvents = "none";
 
+    function clamp(value: number, min: number, max: number) {
+      return Math.min(Math.max(value, min), max);
+    }
+
     function handleMouseMove(event: MouseEvent) {
       const rect = gl.canvas.getBoundingClientRect();
+      const isInside =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+
+      if (!isInside) {
+        targetMouse = [0.5, 0.5];
+        return;
+      }
+
       targetMouse = [
-        (event.clientX - rect.left) / rect.width,
-        1 - (event.clientY - rect.top) / rect.height,
+        clamp((event.clientX - rect.left) / rect.width, 0, 1),
+        clamp(1 - (event.clientY - rect.top) / rect.height, 0, 1),
       ];
     }
 
@@ -234,7 +265,14 @@ export default function SoftAurora({
       }
     }
 
-    window.addEventListener("resize", resize);
+    function queueResize() {
+      cancelAnimationFrame(resizeFrameId);
+      resizeFrameId = requestAnimationFrame(resize);
+    }
+
+    const resizeObserver = new ResizeObserver(queueResize);
+    resizeObserver.observe(containerElement);
+
     resize();
 
     const geometry = new Triangle(gl);
@@ -269,15 +307,14 @@ export default function SoftAurora({
     containerElement.appendChild(gl.canvas);
     resize();
 
-    if (enableMouseInteraction) {
+    if (enableMouseInteraction && !shouldReduceMotion) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseleave", handleMouseLeave);
     }
 
-    function update(time: number) {
+    function renderFrame(time: number) {
       if (!program) return;
 
-      animationFrameId = requestAnimationFrame(update);
       program.uniforms.uTime.value = time * 0.001;
 
       if (enableMouseInteraction) {
@@ -293,13 +330,73 @@ export default function SoftAurora({
       renderer.render({ scene: mesh });
     }
 
-    animationFrameId = requestAnimationFrame(update);
+    function shouldAnimate() {
+      return !shouldReduceMotion && isVisible && isDocumentVisible;
+    }
+
+    function startAnimation() {
+      if (animationFrameId || !shouldAnimate()) return;
+
+      function update(time: number) {
+        animationFrameId = 0;
+        if (!shouldAnimate()) return;
+
+        renderFrame(time);
+        animationFrameId = requestAnimationFrame(update);
+      }
+
+      animationFrameId = requestAnimationFrame(update);
+    }
+
+    function stopAnimation() {
+      if (!animationFrameId) return;
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = 0;
+    }
+
+    function handleVisibilityChange() {
+      isDocumentVisible = document.visibilityState === "visible";
+      if (isDocumentVisible) {
+        startAnimation();
+      } else {
+        stopAnimation();
+      }
+    }
+
+    let intersectionObserver: IntersectionObserver | undefined;
+    if (pauseWhenOffscreen && "IntersectionObserver" in window) {
+      intersectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            startAnimation();
+          } else {
+            stopAnimation();
+          }
+        },
+        { threshold: 0.01 },
+      );
+      intersectionObserver.observe(containerElement);
+    } else {
+      isVisible = true;
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    if (shouldReduceMotion) {
+      renderFrame(0);
+    } else {
+      startAnimation();
+    }
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resize);
+      stopAnimation();
+      cancelAnimationFrame(resizeFrameId);
+      resizeObserver.disconnect();
+      intersectionObserver?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
 
-      if (enableMouseInteraction) {
+      if (enableMouseInteraction && !shouldReduceMotion) {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseleave", handleMouseLeave);
       }
@@ -319,10 +416,13 @@ export default function SoftAurora({
     colorSpeed,
     enableMouseInteraction,
     layerOffset,
+    maxDpr,
     mouseInfluence,
     noiseAmplitude,
     noiseFrequency,
     octaveDecay,
+    pauseWhenOffscreen,
+    respectReducedMotion,
     scale,
     speed,
   ]);

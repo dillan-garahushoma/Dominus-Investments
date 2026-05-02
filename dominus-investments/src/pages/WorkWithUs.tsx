@@ -5,6 +5,7 @@ import { useInView } from "../hooks/useInView";
 const GOLD = "#C6922A";
 const CREAM = "#f9f6f1";
 const INK = "#1a1a1a";
+const WHATSAPP_NUMBER = "27699294459";
 
 const industries = [
   "Logistics & Transport",
@@ -26,6 +27,13 @@ const revenueRanges = [
   "R250,000 - R500,000",
   "R500,000 - R1,000,000",
   "R1,000,000+",
+];
+
+const fitPoints = [
+  "You have traction, but the business depends too heavily on you.",
+  "Revenue is moving, but profit, pricing, or cash flow feels unclear.",
+  "Your team needs stronger systems, accountability, and operating rhythm.",
+  "You want growth that is structured rather than reactive.",
 ];
 
 const trustSignals = [

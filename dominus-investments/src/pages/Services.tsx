@@ -1,11 +1,9 @@
 import Footer from "../components/Footer";
 import { useInView } from "../hooks/useInView";
-import { lazy, Suspense } from "react";
 
 const GOLD = "#C6922A";
 const CREAM = "#f9f6f1";
 const INK = "#1a1a1a";
-const SoftAurora = lazy(() => import("../components/SoftAurora"));
 
 const services = [
   {
@@ -72,23 +70,34 @@ function Hero() {
         .svc-hero-inner {
           position: relative;
           z-index: 2;
-          max-width: 1160px;
+          max-width: 900px;
           margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1.05fr 0.95fr;
-          gap: 72px;
-          align-items: end;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
         }
         .svc-eyebrow {
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          justify-content: center;
           gap: 14px;
           margin-bottom: 32px;
         }
+        .svc-hero-logo {
+          display: block;
+          width: 58px;
+          height: 58px;
+          object-fit: contain;
+          margin: 0 auto 22px;
+        }
         .svc-eyebrow-line {
           width: 42px;
+          flex: 0 0 42px;
           height: 1px;
           background: ${GOLD};
+          opacity: 0.78;
         }
         .svc-eyebrow-text {
           font-family: 'Jost', sans-serif;
@@ -103,7 +112,7 @@ function Hero() {
           font-weight: 300;
           line-height: 0.96;
           letter-spacing: -0.035em;
-          margin: 0;
+          margin: 0 auto;
         }
         .svc-hero-title em {
           color: ${GOLD};
@@ -111,8 +120,10 @@ function Hero() {
           font-weight: 300;
         }
         .svc-hero-copy {
-          border-left: 1px solid rgba(198,146,42,0.45);
-          padding-left: 34px;
+          max-width: 700px;
+          margin: 34px auto 0;
+          padding-top: 30px;
+          border-top: 1px solid rgba(198,146,42,0.34);
         }
         .svc-lead {
           font-size: clamp(24px, 3vw, 40px);
@@ -135,18 +146,39 @@ function Hero() {
           margin-top: 30px;
         }
         @media (max-width: 900px) {
-          .svc-hero { padding: 142px 28px 88px; }
-          .svc-hero-inner { grid-template-columns: 1fr; gap: 42px; }
-          .svc-hero-copy { padding-left: 22px; }
+          .svc-hero { min-height: auto; padding: 138px 28px 86px; }
+          .svc-hero-inner { max-width: 720px; }
+          .svc-hero-title { font-size: 68px; }
+          .svc-lead { font-size: 28px; }
+          .svc-body { font-size: 18px; }
+          .svc-build-line { font-size: 24px; margin-top: 24px; }
+        }
+        @media (max-width: 560px) {
+          .svc-hero { padding: 122px 20px 72px; }
+          .svc-hero-logo { width: 50px; height: 50px; margin-bottom: 18px; }
+          .svc-eyebrow { gap: 11px; margin-bottom: 26px; }
+          .svc-eyebrow-line { width: 24px; flex-basis: 24px; }
+          .svc-eyebrow-text { font-size: 9.5px; letter-spacing: 0.18em; }
+          .svc-hero-title { font-size: 52px; line-height: 1; letter-spacing: -0.02em; }
+          .svc-hero-copy { margin-top: 28px; padding-top: 24px; }
+          .svc-lead { font-size: 24px; margin-bottom: 18px; }
+          .svc-body { font-size: 16px; line-height: 1.72; }
+          .svc-build-line { font-size: 21px; }
         }
       `}</style>
 
       <section className="svc-hero">
         <div className="svc-hero-inner">
           <div className="transition-slide-up visible">
+            <img
+              src="/dominus-logo.png"
+              alt="Dominus Investments logo"
+              className="svc-hero-logo"
+            />
             <div className="svc-eyebrow">
               <div className="svc-eyebrow-line" />
               <span className="svc-eyebrow-text">Services</span>
+              <div className="svc-eyebrow-line" />
             </div>
             <h1 className="svc-hero-title">
               Build.<br />Stabilise.<br /><em>Scale.</em>
@@ -346,6 +378,21 @@ function ServicesList() {
           .svc-card:last-child { border-bottom: none !important; }
           .svc-card-number { margin-bottom: 34px; }
         }
+        @media (max-width: 560px) {
+          .svc-list-root { padding: 72px 20px; }
+          .svc-list-header { margin-bottom: 38px; }
+          .svc-section-label { font-size: 9.5px; letter-spacing: 0.18em; margin-bottom: 18px; }
+          .svc-list-title { font-size: 40px; line-height: 1.08; letter-spacing: -0.02em; }
+          .svc-list-copy { font-size: 16px; line-height: 1.72; }
+          .svc-card { padding: 30px 22px; }
+          .svc-card-number { font-size: 46px; margin-bottom: 26px; }
+          .svc-card-title { font-size: 30px; }
+          .svc-card-intro { font-size: 16px; line-height: 1.7; margin-bottom: 26px; }
+          .svc-feature-list { gap: 11px; margin-bottom: 28px; }
+          .svc-feature-list li { align-items: flex-start; line-height: 1.45; }
+          .svc-card-actions { flex-direction: column; }
+          .svc-action { width: 100%; text-align: center; }
+        }
       `}</style>
 
       <section className="svc-list-root" ref={ref}>
@@ -412,21 +459,6 @@ function PartnerSection() {
             radial-gradient(ellipse at center, transparent 0%, rgba(13,13,13,0.28) 42%, rgba(13,13,13,0.88) 100%);
           pointer-events: none;
           z-index: 1;
-        }
-        .partner-aurora {
-          position: absolute;
-          inset: -8%;
-          z-index: 0;
-          opacity: 0.72;
-          filter: saturate(1.02);
-        }
-        .partner-aurora-fallback {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          background:
-            radial-gradient(ellipse 68% 70% at 50% 58%, rgba(198,146,42,0.18), transparent 68%),
-            radial-gradient(ellipse 40% 48% at 58% 42%, rgba(249,246,241,0.08), transparent 70%);
         }
         .partner-inner {
           position: relative;
@@ -508,30 +540,17 @@ function PartnerSection() {
           .partner-label::before,
           .partner-label::after { width: 24px; }
         }
+        @media (max-width: 560px) {
+          .partner-root { padding: 78px 20px; }
+          .partner-label { gap: 10px; margin-bottom: 24px; }
+          .partner-label span { font-size: 9.5px; letter-spacing: 0.18em; }
+          .partner-title { font-size: 40px; line-height: 1.08; }
+          .partner-copy { font-size: 16px; line-height: 1.72; margin-bottom: 30px; }
+          .partner-btn { width: 100%; padding: 16px 22px; }
+        }
       `}</style>
 
       <section className="partner-root" ref={ref}>
-        <Suspense fallback={<div className="partner-aurora-fallback" aria-hidden="true" />}>
-          <SoftAurora
-            className="partner-aurora"
-            speed={0.48}
-            scale={1.35}
-            brightness={0.72}
-            color1="#C6922A"
-            color2="#F9F6F1"
-            noiseFrequency={2.2}
-            noiseAmplitude={0.9}
-            bandHeight={0.42}
-            bandSpread={0.88}
-            octaveDecay={0.18}
-            layerOffset={0.56}
-            colorSpeed={0.65}
-            enableMouseInteraction={false}
-            maxDpr={1}
-            pauseWhenOffscreen
-            respectReducedMotion
-          />
-        </Suspense>
         <div className="partner-inner">
           <div className={`transition-slide-up${inView ? " visible" : ""}`}>
             <div className="partner-label"><span>Partner With Dominus</span></div>

@@ -118,6 +118,13 @@ function AboutHero() {
           gap: 14px;
           margin-bottom: 40px;
         }
+        .ah-hero-logo {
+          display: block;
+          width: 58px;
+          height: 58px;
+          object-fit: contain;
+          margin: 0 auto 22px;
+        }
         .ah-line { width: 40px; height: 1px; background: ${GOLD}; opacity: 0.7; }
         .ah-eyebrow-text {
           font-family: 'Jost', sans-serif;
@@ -162,6 +169,11 @@ function AboutHero() {
         <div className="ah-accent-line" />
         <div className="ah-inner">
           <div className={`reveal${mounted ? " in" : ""}`}>
+            <img
+              src="/dominus-logo.png"
+              alt="Dominus Investments logo"
+              className="ah-hero-logo"
+            />
             <div className="ah-eyebrow">
               <div className="ah-line" />
               <span className="ah-eyebrow-text">Who We Are</span>

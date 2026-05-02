@@ -71,11 +71,12 @@ function WorkHero() {
     <>
       <style>{`
         .wwu-hero {
-          min-height: 76vh;
-          padding: 168px 48px 116px;
+          min-height: 82vh;
+          padding: 160px 48px 104px;
           background:
-            radial-gradient(ellipse 72% 72% at 52% 58%, rgba(198,146,42,0.12), transparent 68%),
-            linear-gradient(135deg, #101010 0%, ${INK} 58%, #0d0d0d 100%);
+            radial-gradient(ellipse 80% 70% at 70% 34%, rgba(198,146,42,0.14), transparent 62%),
+            radial-gradient(ellipse 52% 52% at 12% 82%, rgba(249,246,241,0.045), transparent 64%),
+            linear-gradient(135deg, #0f0f0f 0%, ${INK} 54%, #0b0b0b 100%);
           color: ${CREAM};
           font-family: 'Cormorant Garamond', Georgia, serif;
           position: relative;
@@ -86,10 +87,10 @@ function WorkHero() {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(198,146,42,0.055) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(198,146,42,0.055) 1px, transparent 1px);
-          background-size: 92px 92px;
-          mask-image: radial-gradient(circle at center, black, transparent 72%);
+            linear-gradient(rgba(198,146,42,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(198,146,42,0.05) 1px, transparent 1px);
+          background-size: 96px 96px;
+          mask-image: radial-gradient(circle at 54% 42%, black, transparent 72%);
           pointer-events: none;
         }
         .wwu-hero::after {
@@ -107,22 +108,47 @@ function WorkHero() {
           max-width: 1160px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: 1.08fr 0.92fr;
+          grid-template-columns: minmax(0, 1.08fr) minmax(330px, 0.72fr);
           gap: 76px;
-          align-items: end;
+          align-items: center;
+        }
+        .wwu-hero-content {
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
         .wwu-eyebrow {
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          justify-content: center;
           gap: 14px;
-          margin-bottom: 32px;
+          margin-bottom: 30px;
         }
-        .wwu-eyebrow-line {
+        .wwu-hero-logo {
+          display: block;
+          width: 58px;
+          height: 58px;
+          object-fit: contain;
+          margin: 0 auto 22px;
+        }
+        .wwu-eyebrow::before {
+          content: '';
           width: 42px;
+          flex: 0 0 42px;
           height: 1px;
           background: ${GOLD};
+          opacity: 0.78;
         }
-        .wwu-eyebrow-text {
+        .wwu-eyebrow::after {
+          content: '';
+          width: 42px;
+          flex: 0 0 42px;
+          height: 1px;
+          background: ${GOLD};
+          opacity: 0.78;
+        }
+        .wwu-eyebrow span {
           font-family: 'Jost', sans-serif;
           font-size: 10.5px;
           font-weight: 700;
@@ -131,73 +157,292 @@ function WorkHero() {
           color: ${GOLD};
         }
         .wwu-hero-title {
-          font-size: clamp(56px, 7.8vw, 108px);
+          font-size: clamp(54px, 7.4vw, 104px);
           font-weight: 300;
           line-height: 0.98;
-          letter-spacing: -0.035em;
-          margin: 0;
+          letter-spacing: -0.036em;
+          margin: 0 auto 30px;
+          max-width: 780px;
         }
         .wwu-hero-title em {
           color: ${GOLD};
           font-style: italic;
           font-weight: 300;
         }
-        .wwu-hero-copy {
-          border-left: 1px solid rgba(198,146,42,0.45);
-          padding-left: 34px;
-        }
-        .wwu-hero-copy p {
+        .wwu-hero-lead {
           font-size: clamp(18px, 1.7vw, 22px);
-          line-height: 1.82;
-          color: rgba(249,246,241,0.64);
+          line-height: 1.78;
+          color: rgba(249,246,241,0.66);
           font-style: italic;
-          margin: 0 0 34px;
+          margin: 0 auto;
+          max-width: 610px;
         }
-        .wwu-hero-button {
-          display: inline-block;
+        .wwu-hero-actions {
+          display: flex;
+          justify-content: center;
+          gap: 14px;
+          flex-wrap: wrap;
+          margin-top: 42px;
+        }
+        .wwu-btn-primary,
+        .wwu-btn-ghost {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 52px;
+          border-radius: 3px;
+          padding: 15px 30px;
           font-family: 'Jost', sans-serif;
           font-size: 10.5px;
           font-weight: 700;
           letter-spacing: 0.18em;
           text-transform: uppercase;
           text-decoration: none;
+          transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+        }
+        .wwu-btn-primary {
           color: white;
           background: ${GOLD};
           border: 1px solid ${GOLD};
-          border-radius: 3px;
-          padding: 17px 36px;
-          transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
         }
-        .wwu-hero-button:hover {
+        .wwu-btn-primary:hover {
           background: #b0811f;
+          border-color: #b0811f;
           transform: translateY(-2px);
-          box-shadow: 0 14px 38px rgba(198,146,42,0.28);
+          box-shadow: 0 14px 38px rgba(198,146,42,0.24);
+        }
+        .wwu-btn-ghost {
+          background: rgba(249,246,241,0.04);
+          border: 1px solid rgba(249,246,241,0.22);
+          color: rgba(249,246,241,0.78);
+        }
+        .wwu-btn-ghost:hover {
+          border-color: rgba(249,246,241,0.54);
+          color: ${CREAM};
+          transform: translateY(-2px);
+        }
+        .wwu-hero-panel {
+          border: 1px solid rgba(198,146,42,0.26);
+          background: linear-gradient(145deg, rgba(249,246,241,0.08), rgba(249,246,241,0.025));
+          box-shadow: 0 28px 80px rgba(0,0,0,0.22);
+          padding: 34px;
+          backdrop-filter: blur(8px);
+        }
+        .wwu-panel-label {
+          font-family: 'Jost', sans-serif;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: ${GOLD};
+          margin-bottom: 26px;
+        }
+        .wwu-panel-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: grid;
+          gap: 22px;
+        }
+        .wwu-panel-list li {
+          border-top: 1px solid rgba(249,246,241,0.1);
+          padding-top: 20px;
+        }
+        .wwu-panel-list li:first-child {
+          border-top: none;
+          padding-top: 0;
+        }
+        .wwu-panel-list strong {
+          display: block;
+          color: ${CREAM};
+          font-size: 24px;
+          font-weight: 400;
+          line-height: 1.15;
+          margin-bottom: 8px;
+        }
+        .wwu-panel-list span {
+          display: block;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          line-height: 1.75;
+          color: rgba(249,246,241,0.52);
         }
         @media (max-width: 900px) {
-          .wwu-hero { padding: 142px 28px 88px; }
-          .wwu-hero-inner { grid-template-columns: 1fr; gap: 42px; }
-          .wwu-hero-copy { padding-left: 22px; }
+          .wwu-hero { padding: 138px 28px 88px; }
+          .wwu-hero-inner { grid-template-columns: 1fr; gap: 46px; }
+          .wwu-hero-title { font-size: 64px; }
+          .wwu-hero-lead { font-size: 18px; }
+          .wwu-hero-panel { max-width: 560px; justify-self: center; }
+        }
+        @media (max-width: 560px) {
+          .wwu-hero { min-height: auto; padding: 122px 20px 74px; }
+          .wwu-hero-logo { width: 50px; height: 50px; margin-bottom: 18px; }
+          .wwu-eyebrow { gap: 11px; margin-bottom: 26px; }
+          .wwu-eyebrow::before,
+          .wwu-eyebrow::after { width: 24px; flex-basis: 24px; }
+          .wwu-eyebrow span { font-size: 9.5px; letter-spacing: 0.18em; }
+          .wwu-hero-title { font-size: 46px; line-height: 1; letter-spacing: -0.02em; margin-bottom: 24px; }
+          .wwu-hero-lead { font-size: 16px; line-height: 1.72; }
+          .wwu-hero-actions { flex-direction: column; }
+          .wwu-btn-primary,
+          .wwu-btn-ghost { width: 100%; }
+          .wwu-hero-panel { width: 100%; padding: 28px 24px; }
+          .wwu-panel-list strong { font-size: 22px; }
         }
       `}</style>
 
       <section className="wwu-hero">
         <div className="wwu-hero-inner">
-          <div className="transition-slide-up visible">
-            <div className="wwu-eyebrow">
-              <div className="wwu-eyebrow-line" />
-              <span className="wwu-eyebrow-text">Work with Dominus</span>
-            </div>
+          <div className="wwu-hero-content transition-slide-up visible">
+            <img
+              src="/dominus-logo.png"
+              alt="Dominus Investments logo"
+              className="wwu-hero-logo"
+            />
+            <div className="wwu-eyebrow"><span>Work with Dominus</span></div>
             <h1 className="wwu-hero-title">
-              Is your business ready<br />for what comes <em>next?</em>
+              Is your business ready for what comes <em>next?</em>
             </h1>
+            <p className="wwu-hero-lead">
+              We only work with a small number of businesses at a time. Tell us about yours, and we'll tell you if we can help build the structure behind your next stage.
+            </p>
+            <div className="wwu-hero-actions">
+              <a href="#form" className="wwu-btn-primary">Submit Application</a>
+              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className="wwu-btn-ghost">Talk First</a>
+            </div>
           </div>
 
-          <div className="wwu-hero-copy transition-slide-up visible">
-            <p>
-              We only work with a small number of businesses at a time. Tell us about yours, and we'll tell you if we can help.
-            </p>
-            <a href="#form" className="wwu-hero-button">Submit Your Application</a>
+          <aside className="wwu-hero-panel transition-slide-up visible" aria-label="How Dominus works">
+            <div className="wwu-panel-label">How we decide fit</div>
+            <ul className="wwu-panel-list">
+              <li>
+                <strong>Selective by design</strong>
+                <span>We take on fewer businesses so implementation gets proper attention.</span>
+              </li>
+              <li>
+                <strong>Diagnostic first</strong>
+                <span>We begin by understanding the numbers, operations, people, and constraints.</span>
+              </li>
+              <li>
+                <strong>Built with you</strong>
+                <span>Our work is practical, hands-on, and focused on systems your team can actually use.</span>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function FitSection() {
+  const { ref, inView } = useInView(0.12);
+
+  return (
+    <>
+      <style>{`
+        .wwu-fit-root {
+          background: #fffaf2;
+          padding: 100px 48px 0;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+        .wwu-fit-inner {
+          max-width: 1160px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 0.9fr 1.1fr;
+          gap: 70px;
+          align-items: start;
+          border-bottom: 1px solid rgba(26,26,26,0.1);
+          padding-bottom: 92px;
+        }
+        .wwu-fit-label {
+          font-family: 'Jost', sans-serif;
+          font-size: 10.5px;
+          font-weight: 700;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: ${GOLD};
+          margin-bottom: 24px;
+        }
+        .wwu-fit-title {
+          font-size: clamp(40px, 4.8vw, 68px);
+          font-weight: 300;
+          line-height: 1.04;
+          letter-spacing: -0.028em;
+          color: ${INK};
+          margin: 0;
+        }
+        .wwu-fit-title em { color: ${GOLD}; font-style: italic; }
+        .wwu-fit-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: grid;
+          gap: 0;
+          border-top: 1px solid rgba(26,26,26,0.1);
+        }
+        .wwu-fit-list li {
+          display: grid;
+          grid-template-columns: 46px 1fr;
+          gap: 18px;
+          padding: 24px 0;
+          border-bottom: 1px solid rgba(26,26,26,0.1);
+          font-size: clamp(19px, 2vw, 27px);
+          line-height: 1.28;
+          color: rgba(26,26,26,0.78);
+          opacity: 0;
+          transform: translateY(18px);
+          transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .wwu-fit-list li.visible { opacity: 1; transform: translateY(0); }
+        .wwu-fit-list li::before {
+          content: '';
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: ${GOLD};
+          margin-top: 11px;
+          justify-self: center;
+        }
+        @media (max-width: 900px) {
+          .wwu-fit-root { padding: 78px 28px 0; }
+          .wwu-fit-inner { grid-template-columns: 1fr; gap: 42px; padding-bottom: 74px; }
+        }
+        @media (max-width: 560px) {
+          .wwu-fit-root { padding: 72px 20px 0; }
+          .wwu-fit-inner { gap: 32px; padding-bottom: 64px; }
+          .wwu-fit-label { font-size: 9.5px; letter-spacing: 0.18em; margin-bottom: 18px; }
+          .wwu-fit-title { font-size: 38px; line-height: 1.08; letter-spacing: -0.02em; }
+          .wwu-fit-list li {
+            grid-template-columns: 28px 1fr;
+            gap: 12px;
+            padding: 20px 0;
+            font-size: 18px;
+            line-height: 1.38;
+          }
+          .wwu-fit-list li::before { justify-self: start; margin-top: 8px; }
+        }
+      `}</style>
+
+      <section className="wwu-fit-root" ref={ref}>
+        <div className="wwu-fit-inner">
+          <div className={`transition-slide-up${inView ? " visible" : ""}`}>
+            <div className="wwu-fit-label">Best-fit businesses</div>
+            <h2 className="wwu-fit-title">We are useful when ambition needs <em>structure.</em></h2>
           </div>
+
+          <ul className="wwu-fit-list">
+            {fitPoints.map((point, index) => (
+              <li
+                className={inView ? "visible" : ""}
+                style={{ transitionDelay: inView ? `${index * 0.1}s` : "0s" }}
+                key={point}
+              >
+                {point}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </>
@@ -252,9 +497,13 @@ function LeadCaptureForm() {
           max-width: 1160px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: 0.82fr 1.18fr;
+          grid-template-columns: 0.78fr 1.22fr;
           gap: 72px;
           align-items: start;
+        }
+        .wwu-form-side {
+          position: sticky;
+          top: 96px;
         }
         .wwu-form-kicker {
           font-family: 'Jost', sans-serif;
@@ -282,7 +531,15 @@ function LeadCaptureForm() {
           line-height: 1.85;
           color: rgba(26,26,26,0.58);
           font-style: italic;
-          margin: 0;
+          margin: 0 0 34px;
+        }
+        .wwu-review-note {
+          border-left: 2px solid ${GOLD};
+          padding: 18px 0 18px 22px;
+          font-family: 'Jost', sans-serif;
+          font-size: 13px;
+          line-height: 1.8;
+          color: rgba(26,26,26,0.58);
         }
         .wwu-form-card {
           background: #fffaf2;
@@ -409,6 +666,7 @@ function LeadCaptureForm() {
         @media (max-width: 960px) {
           .wwu-form-root { padding: 86px 28px; }
           .wwu-form-inner { grid-template-columns: 1fr; gap: 44px; }
+          .wwu-form-side { position: static; }
         }
         @media (max-width: 680px) {
           .wwu-form-card { padding: 30px 24px; }
@@ -416,16 +674,34 @@ function LeadCaptureForm() {
           .wwu-submit-row { align-items: flex-start; flex-direction: column; }
           .wwu-submit { width: 100%; }
         }
+        @media (max-width: 560px) {
+          .wwu-form-root { padding: 76px 20px; }
+          .wwu-form-inner { gap: 34px; }
+          .wwu-form-kicker { font-size: 9.5px; letter-spacing: 0.18em; margin-bottom: 18px; }
+          .wwu-form-title { font-size: 40px; line-height: 1.08; letter-spacing: -0.02em; }
+          .wwu-form-intro { font-size: 16px; line-height: 1.72; margin-bottom: 26px; }
+          .wwu-review-note { padding: 16px 0 16px 18px; }
+          .wwu-form-card { padding: 24px 18px; }
+          .wwu-form-grid { gap: 20px; }
+          .wwu-input,
+          .wwu-select,
+          .wwu-textarea { font-size: 16px; }
+          .wwu-submit-row { gap: 18px; padding-top: 24px; }
+          .wwu-confidential { max-width: none; }
+        }
       `}</style>
 
       <section className="wwu-form-root" id="form" ref={ref}>
         <div className="wwu-form-inner">
-          <div className={`transition-slide-up${inView ? " visible" : ""}`}>
+          <div className={`wwu-form-side transition-slide-up${inView ? " visible" : ""}`}>
             <div className="wwu-form-kicker">Application</div>
             <h2 className="wwu-form-title">Tell us about your <em>business.</em></h2>
             <p className="wwu-form-intro">
               All submissions are reviewed personally. We respond within 2 business days.
             </p>
+            <div className="wwu-review-note">
+              The more specific you are, the better we can understand whether Dominus is the right partner for your current stage.
+            </div>
           </div>
 
           <form
@@ -558,6 +834,12 @@ function TrustSignals() {
           .wwu-trust-card { border-right: none; border-bottom: 1px solid rgba(26,26,26,0.1); }
           .wwu-trust-card:last-child { border-bottom: none; }
         }
+        @media (max-width: 560px) {
+          .wwu-trust-root { padding: 0 20px 72px; }
+          .wwu-trust-card { padding: 28px 22px; }
+          .wwu-trust-title { font-size: 28px; }
+          .wwu-trust-text { line-height: 1.7; }
+        }
       `}</style>
 
       <section className="wwu-trust-root" ref={ref}>
@@ -686,6 +968,20 @@ function NextSteps() {
           .wwu-next-inner { grid-template-columns: 1fr; gap: 50px; }
           .wwu-next-step { grid-template-columns: 56px 1fr; gap: 16px; }
         }
+        @media (max-width: 560px) {
+          .wwu-next-root { padding: 76px 20px; }
+          .wwu-next-inner { gap: 36px; }
+          .wwu-next-label { font-size: 9.5px; letter-spacing: 0.18em; margin-bottom: 18px; }
+          .wwu-next-title { font-size: 40px; line-height: 1.08; letter-spacing: -0.02em; }
+          .wwu-next-step {
+            grid-template-columns: 44px 1fr;
+            gap: 14px;
+            padding: 26px 0;
+          }
+          .wwu-next-step::before { width: 30px; height: 30px; margin-top: 2px; }
+          .wwu-next-step h3 { font-size: 24px; }
+          .wwu-next-step p { line-height: 1.7; }
+        }
       `}</style>
 
       <section className="wwu-next-root" ref={ref}>
@@ -804,6 +1100,14 @@ function WhatsAppCTA() {
           .wwu-whatsapp-label::before,
           .wwu-whatsapp-label::after { width: 22px; }
         }
+        @media (max-width: 560px) {
+          .wwu-whatsapp-root { padding: 78px 20px; }
+          .wwu-whatsapp-label { gap: 10px; margin-bottom: 24px; }
+          .wwu-whatsapp-label span { font-size: 9.5px; letter-spacing: 0.18em; }
+          .wwu-whatsapp-title { font-size: 40px; line-height: 1.08; }
+          .wwu-whatsapp-copy { font-size: 16px; line-height: 1.72; margin-bottom: 30px; }
+          .wwu-whatsapp-button { width: 100%; padding: 16px 22px; }
+        }
       `}</style>
 
       <section className="wwu-whatsapp-root" ref={ref}>
@@ -814,7 +1118,7 @@ function WhatsAppCTA() {
             Send us a message on WhatsApp. We respond the same day.
           </p>
           <a
-            href="https://wa.me/+27699294459"
+            href={`https://wa.me/${WHATSAPP_NUMBER}`}
             target="_blank"
             rel="noopener noreferrer"
             className="wwu-whatsapp-button"
@@ -831,6 +1135,7 @@ export default function WorkWithUs() {
   return (
     <div style={{ minHeight: "100vh", background: INK }}>
       <WorkHero />
+      <FitSection />
       <LeadCaptureForm />
       <TrustSignals />
       <NextSteps />
